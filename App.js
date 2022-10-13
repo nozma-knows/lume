@@ -1,118 +1,86 @@
-/* eslint-disable react-native/no-inline-styles */
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, {useState, useEffect} from 'react';
+import {SafeAreaView, View, Text, StyleSheet, Pressable} from 'react-native';
+import Scan from './ble/scan';
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+export default function App() {
+  const [scanning, setScanning] = useState(false);
+  const [selectedDevice, setSelectedDevice] = useState(null);
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-/* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
- * LTI update could not be added via codemod */
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+  useEffect(() => {
+    if (selectedDevice) {
+      console.log('selectedDevice: ', selectedDevice.name);
+    }
+  }, [selectedDevice]);
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Text style={{fontSize: 40}}>Lume</Text>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView style={styles.AppView}>
+      <View style={styles.TitleView}>
+        <Text style={styles.Title}>Lume</Text>
+      </View>
+      <View style={styles.ScanView}>
+        {selectedDevice ? (
+          <Text>{selectedDevice.name}</Text>
+        ) : (
+          <View style={styles.ScanView}>
+            {scanning ? (
+              <Scan
+                setScanning={setScanning}
+                selectedDevice={selectedDevice}
+                setSelectedDevice={setSelectedDevice}
+              />
+            ) : (
+              <Pressable
+                style={styles.ScanButton}
+                onPress={() => setScanning(true)}>
+                <Text style={styles.ScanButtonText}>Scan</Text>
+              </Pressable>
+            )}
+          </View>
+        )}
+      </View>
+      <View style={styles.NavBar}>
+        <Text>Nav bar</Text>
+      </View>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  AppView: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  TitleView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  Title: {
+    fontSize: 40,
+    fontWeight: 'bold',
   },
-  highlight: {
-    fontWeight: '700',
+  ScanView: {
+    flex: 8,
+    width: '100%',
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  ScanButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'blue',
+    width: 150,
+    height: 150,
+    borderRadius: 150,
+  },
+  ScanButtonText: {
+    fontSize: 40,
+    color: 'white',
+  },
+  NavBar: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
-
-export default App;
