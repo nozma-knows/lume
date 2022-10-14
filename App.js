@@ -8,9 +8,20 @@ export default function App() {
 
   useEffect(() => {
     if (selectedDevice) {
-      console.log('selectedDevice: ', selectedDevice.name);
+      selectedDevice.connect().then(async device => {
+        await device.discoverAllServicesAndCharacteristics();
+        // const services = await device.services();
+        // services.map(async service => {
+        //   console.log('service: ', service.uuid);
+        //   const characteristics = await service.characteristics();
+        //   characteristics.map(characteristic => {
+        //     console.log('characteristic: ', characteristic.uuid);
+        //   });
+        // });
+      });
     }
   }, [selectedDevice]);
+
   return (
     <SafeAreaView style={styles.AppView}>
       <View style={styles.TitleView}>
