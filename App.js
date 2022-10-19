@@ -1,26 +1,42 @@
 import React, {useState, useEffect} from 'react';
 import {SafeAreaView, View, Text, StyleSheet, Pressable} from 'react-native';
 import Scan from './ble/scan';
+import DeviceSetup from './ble/deviceSetup';
 
 export default function App() {
   const [scanning, setScanning] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState(null);
+  const [servicesDiscovered, setServicesDiscovered] = useState(false);
+
+  // When device is selected, discover services and characteristics
+  useEffect(() => {
+    if (selectedDevice) {
+      selectedDevice
+        .connect()
+        .then(device => {
+          return device.discoverAllServicesAndCharacteristics();
+        })
+        .then(() => setServicesDiscovered(true))
+        .catch(error =>
+          console.log(
+            'Error discovering services and characteristics: ',
+            error,
+          ),
+        );
+    }
+  }, [selectedDevice]);
 
   useEffect(() => {
     if (selectedDevice) {
-      selectedDevice.connect().then(async device => {
-        await device.discoverAllServicesAndCharacteristics();
-        // const services = await device.services();
-        // services.map(async service => {
-        //   console.log('service: ', service.uuid);
-        //   const characteristics = await service.characteristics();
-        //   characteristics.map(characteristic => {
-        //     console.log('characteristic: ', characteristic.uuid);
-        //   });
-        // });
-      });
+      console.log('selected device: ', selectedDevice);
     }
   }, [selectedDevice]);
+
+  useEffect(() => {
+    if (servicesDiscovered) {
+      console.log('services discovered');
+    }
+  }, [servicesDiscovered]);
 
   return (
     <SafeAreaView style={styles.AppView}>
@@ -29,7 +45,13 @@ export default function App() {
       </View>
       <View style={styles.ScanView}>
         {selectedDevice ? (
-          <Text>{selectedDevice.name}</Text>
+          <View style={{flex: 1, width: '100%'}}>
+            {servicesDiscovered ? (
+              <DeviceSetup device={selectedDevice} />
+            ) : (
+              <Text>Loading device</Text>
+            )}
+          </View>
         ) : (
           <View style={styles.ScanView}>
             {scanning ? (

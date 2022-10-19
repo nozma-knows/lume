@@ -1,0 +1,108 @@
+/* eslint-disable react-native/no-inline-styles */
+import React, {useState, useEffect} from 'react';
+import {ScrollView, View, Text, TextInput, Pressable} from 'react-native';
+
+const intialDeviceDetails = {
+  name: 'Device 0',
+  location: null,
+};
+
+export default function DeviceSetup({device}) {
+  console.log('DeviceSetup - device: ', {uuid: device.uuid, name: device.name});
+  const deviceDetails = useState(intialDeviceDetails);
+  const [nameFieldSelected, setNameFieldSelected] = useState(false);
+  const [locationFieldSelected, setLocationFieldSelected] = useState(false);
+  const [buttonPressed, setButtonPressed] = useState(false);
+  const [name, setName] = useState('');
+  const [location, setLocation] = useState('');
+
+  useEffect(() => {
+    console.log('name: ', name);
+  }, [name]);
+
+  return (
+    <ScrollView>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignContent: 'center',
+          padding: 20,
+        }}>
+        <Text
+          style={{
+            paddingBottom: 20,
+            textAlign: 'center',
+            fontSize: 40,
+          }}>
+          Device Setup
+        </Text>
+        <View>
+          <Text
+            style={{
+              paddingLeft: 10,
+              paddingBottom: 5,
+              fontWeight: 'bold',
+              fontSize: 15,
+            }}>
+            Name
+          </Text>
+          <TextInput
+            style={{
+              width: '100%',
+              padding: nameFieldSelected ? 18 : 20,
+              marginBottom: 20,
+              borderRadius: 10,
+              fontSize: 18,
+              borderWidth: nameFieldSelected ? 4 : 2,
+            }}
+            onFocus={() => setNameFieldSelected(true)}
+            onBlur={() => setNameFieldSelected(false)}
+            onChangeText={setName}
+            value={name}
+            placeholder="Give this device a name!"
+          />
+        </View>
+        <View>
+          <Text
+            style={{
+              paddingLeft: 10,
+              paddingBottom: 5,
+              fontWeight: 'bold',
+              fontSize: 15,
+            }}>
+            Location
+          </Text>
+          <TextInput
+            style={{
+              width: '100%',
+              padding: locationFieldSelected ? 18 : 20,
+              marginBottom: 20,
+              borderRadius: 10,
+              fontSize: 18,
+              borderWidth: locationFieldSelected ? 4 : 2,
+            }}
+            onFocus={() => setLocationFieldSelected(true)}
+            onBlur={() => setLocationFieldSelected(false)}
+            onChangeText={setLocation}
+            value={location}
+            placeholder="Set the devices location"
+          />
+        </View>
+        <Pressable
+          style={{
+            padding: 20,
+            backgroundColor: 'black',
+            borderRadius: 10,
+            transform: buttonPressed ? [{scale: 0.95}] : [{scale: 1}],
+            // scale: buttonPressed ? '1.2' : '1',
+          }}
+          onPressIn={() => setButtonPressed(true)}
+          onPressOut={() => setButtonPressed(false)}
+          onPress={() => console.log('Save devivce details')}>
+          <Text style={{color: 'white', textAlign: 'center'}}>Save Device</Text>
+        </Pressable>
+      </View>
+    </ScrollView>
+  );
+}

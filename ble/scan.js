@@ -4,6 +4,9 @@ import {BleManager} from 'react-native-ble-plx';
 
 export const manager = new BleManager();
 
+// Services expected for connected device
+const expectedServices = ['0000180a-0000-1000-8000-00805f9b34fb'];
+
 // Function to scan for BLE devices
 const scanning = (selectedDevice, discoveredDevices, setDiscoveredDevices) => {
   // Scan for BLE devices
