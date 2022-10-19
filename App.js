@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {SafeAreaView, View, Text, StyleSheet, Pressable} from 'react-native';
 import Scan from './ble/scan';
 import DeviceSetup from './ble/deviceSetup';
+import {Provider} from 'react-redux';
+import store from './redux/store';
 
 export default function App() {
   const [scanning, setScanning] = useState(false);
@@ -39,41 +41,43 @@ export default function App() {
   }, [servicesDiscovered]);
 
   return (
-    <SafeAreaView style={styles.AppView}>
-      <View style={styles.TitleView}>
-        <Text style={styles.Title}>Lume</Text>
-      </View>
-      <View style={styles.ScanView}>
-        {selectedDevice ? (
-          <View style={{flex: 1, width: '100%'}}>
-            {servicesDiscovered ? (
-              <DeviceSetup device={selectedDevice} />
-            ) : (
-              <Text>Loading device</Text>
-            )}
-          </View>
-        ) : (
-          <View style={styles.ScanView}>
-            {scanning ? (
-              <Scan
-                setScanning={setScanning}
-                selectedDevice={selectedDevice}
-                setSelectedDevice={setSelectedDevice}
-              />
-            ) : (
-              <Pressable
-                style={styles.ScanButton}
-                onPress={() => setScanning(true)}>
-                <Text style={styles.ScanButtonText}>Scan</Text>
-              </Pressable>
-            )}
-          </View>
-        )}
-      </View>
-      <View style={styles.NavBar}>
-        <Text>Nav bar</Text>
-      </View>
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView style={styles.AppView}>
+        <View style={styles.TitleView}>
+          <Text style={styles.Title}>Lume</Text>
+        </View>
+        <View style={styles.ScanView}>
+          {selectedDevice ? (
+            <View style={{flex: 1, width: '100%'}}>
+              {servicesDiscovered ? (
+                <DeviceSetup device={selectedDevice} />
+              ) : (
+                <Text>Loading device</Text>
+              )}
+            </View>
+          ) : (
+            <View style={styles.ScanView}>
+              {scanning ? (
+                <Scan
+                  setScanning={setScanning}
+                  selectedDevice={selectedDevice}
+                  setSelectedDevice={setSelectedDevice}
+                />
+              ) : (
+                <Pressable
+                  style={styles.ScanButton}
+                  onPress={() => setScanning(true)}>
+                  <Text style={styles.ScanButtonText}>Scan</Text>
+                </Pressable>
+              )}
+            </View>
+          )}
+        </View>
+        <View style={styles.NavBar}>
+          <Text>Nav bar</Text>
+        </View>
+      </SafeAreaView>
+    </Provider>
   );
 }
 

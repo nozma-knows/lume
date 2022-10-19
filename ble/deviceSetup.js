@@ -1,24 +1,28 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {ScrollView, View, Text, TextInput, Pressable} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {updateDevices} from './../redux/devicesSlice';
 
-const intialDeviceDetails = {
-  name: 'Device 0',
-  location: null,
+const saveDeviceDetails = (dispatch, device, name, location) => {
+  const data = {
+    id: device.id,
+    name,
+    location,
+  };
+  dispatch(updateDevices(data));
+  return null;
 };
 
 export default function DeviceSetup({device}) {
-  console.log('DeviceSetup - device: ', {uuid: device.uuid, name: device.name});
-  const deviceDetails = useState(intialDeviceDetails);
+  const dispatch = useDispatch();
+  const devices = useSelector(state => state.devices);
+  console.log('deviceSetup: ', devices);
   const [nameFieldSelected, setNameFieldSelected] = useState(false);
   const [locationFieldSelected, setLocationFieldSelected] = useState(false);
   const [buttonPressed, setButtonPressed] = useState(false);
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
-
-  useEffect(() => {
-    console.log('name: ', name);
-  }, [name]);
 
   return (
     <ScrollView>
@@ -99,7 +103,7 @@ export default function DeviceSetup({device}) {
           }}
           onPressIn={() => setButtonPressed(true)}
           onPressOut={() => setButtonPressed(false)}
-          onPress={() => console.log('Save devivce details')}>
+          onPress={() => saveDeviceDetails(dispatch, device, name, location)}>
           <Text style={{color: 'white', textAlign: 'center'}}>Save Device</Text>
         </Pressable>
       </View>
