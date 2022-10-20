@@ -1,11 +1,17 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, View, Text, StyleSheet, Pressable} from 'react-native';
-import Scan from './ble/scan';
-import DeviceSetup from './ble/deviceSetup';
-import {Provider} from 'react-redux';
-import store from './redux/store';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Button,
+} from 'react-native';
+import Scan from './../ble/scan';
+import DeviceSetup from './../ble/deviceSetup';
 
-export default function App() {
+export default function Home({navigation}) {
   const [scanning, setScanning] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [servicesDiscovered, setServicesDiscovered] = useState(false);
@@ -41,43 +47,45 @@ export default function App() {
   }, [servicesDiscovered]);
 
   return (
-    <Provider store={store}>
-      <SafeAreaView style={styles.AppView}>
-        <View style={styles.TitleView}>
-          <Text style={styles.Title}>Lume</Text>
-        </View>
-        <View style={styles.ScanView}>
-          {selectedDevice ? (
-            <View style={{flex: 1, width: '100%'}}>
-              {servicesDiscovered ? (
-                <DeviceSetup device={selectedDevice} />
-              ) : (
-                <Text>Loading device</Text>
-              )}
-            </View>
-          ) : (
-            <View style={styles.ScanView}>
-              {scanning ? (
-                <Scan
-                  setScanning={setScanning}
-                  selectedDevice={selectedDevice}
-                  setSelectedDevice={setSelectedDevice}
-                />
-              ) : (
-                <Pressable
-                  style={styles.ScanButton}
-                  onPress={() => setScanning(true)}>
-                  <Text style={styles.ScanButtonText}>Scan</Text>
-                </Pressable>
-              )}
-            </View>
-          )}
-        </View>
-        <View style={styles.NavBar}>
-          <Text>Nav bar</Text>
-        </View>
-      </SafeAreaView>
-    </Provider>
+    <SafeAreaView style={styles.AppView}>
+      <View style={styles.TitleView}>
+        <Text style={styles.Title}>Lume</Text>
+      </View>
+      <View style={styles.ScanView}>
+        {selectedDevice ? (
+          <View style={{flex: 1, width: '100%'}}>
+            {servicesDiscovered ? (
+              <DeviceSetup device={selectedDevice} />
+            ) : (
+              <Text>Loading device</Text>
+            )}
+          </View>
+        ) : (
+          <View style={styles.ScanView}>
+            {scanning ? (
+              <Scan
+                setScanning={setScanning}
+                selectedDevice={selectedDevice}
+                setSelectedDevice={setSelectedDevice}
+              />
+            ) : (
+              <Pressable
+                style={styles.ScanButton}
+                onPress={() => setScanning(true)}>
+                <Text style={styles.ScanButtonText}>Scan</Text>
+              </Pressable>
+            )}
+          </View>
+        )}
+      </View>
+      <Button
+        title="Go to Details"
+        onPress={() => navigation.navigate('Details')}
+      />
+      <View style={styles.NavBar}>
+        <Text>Nav bar</Text>
+      </View>
+    </SafeAreaView>
   );
 }
 
