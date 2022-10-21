@@ -1,17 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  Button,
-} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, Pressable} from 'react-native';
 import Scan from './../ble/scan';
 import DeviceSetup from './../ble/deviceSetup';
+import Navbar from '../ui/navbar/navbar';
 
-export default function Home({navigation}) {
+export default function Scanner({navigation}) {
   const [scanning, setScanning] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [servicesDiscovered, setServicesDiscovered] = useState(false);
@@ -78,13 +72,7 @@ export default function Home({navigation}) {
           </View>
         )}
       </View>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
-      <View style={styles.NavBar}>
-        <Text>Nav bar</Text>
-      </View>
+      <Navbar navigation={navigation} />
     </SafeAreaView>
   );
 }
@@ -122,10 +110,5 @@ const styles = StyleSheet.create({
   ScanButtonText: {
     fontSize: 40,
     color: 'white',
-  },
-  NavBar: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

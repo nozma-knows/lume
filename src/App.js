@@ -1,40 +1,39 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, Button} from 'react-native';
+
+// Redux
 import {Provider} from 'react-redux';
 import store from './redux/store';
+
+// React navigation
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Home from './screens/Home';
+
+// Screens
+import Scanner from './screens/Scanner';
+import Devices from './screens/Devices';
+import Controller from './screens/Controller';
 
 const Stack = createNativeStackNavigator();
-
-function DetailsScreen({navigation}) {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Details Screen</Text>
-      <Button
-        title="Go to Details... again"
-        onPress={() => navigation.push('Details')}
-      />
-    </View>
-  );
-}
 
 export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Details" component={DetailsScreen} />
+        <Stack.Navigator
+          initialRouteName="Scanner"
+          screenOptions={{
+            headerShown: false,
+            animation: 'none',
+          }}>
+          <Stack.Screen name="Scanner" component={Scanner} />
+          <Stack.Screen name="Controller" component={Controller} />
+          <Stack.Screen name="Devices" component={Devices} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );
 }
-
-// const styles = StyleSheet.create({
 //   AppView: {
 //     flex: 1,
 //     justifyContent: 'flex-start',
