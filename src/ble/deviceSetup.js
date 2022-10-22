@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {ScrollView, View, Text, TextInput, Pressable} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {updateDevices} from './../redux/devicesSlice';
 
 const saveDeviceDetails = (dispatch, device, name, location) => {
@@ -16,8 +16,6 @@ const saveDeviceDetails = (dispatch, device, name, location) => {
 
 export default function DeviceSetup({device}) {
   const dispatch = useDispatch();
-  const devices = useSelector(state => state.devices);
-  console.log('deviceSetup: ', devices);
   const [nameFieldSelected, setNameFieldSelected] = useState(false);
   const [locationFieldSelected, setLocationFieldSelected] = useState(false);
   const [buttonPressed, setButtonPressed] = useState(false);

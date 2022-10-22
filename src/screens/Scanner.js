@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import {SafeAreaView, View, Text, StyleSheet, Pressable} from 'react-native';
 import Scan from './../ble/scan';
 import DeviceSetup from './../ble/deviceSetup';
+import MainTitle from '../ui/titles/mainTitle';
 import Navbar from '../ui/navbar/navbar';
 
 export default function Scanner({navigation}) {
@@ -28,23 +29,9 @@ export default function Scanner({navigation}) {
     }
   }, [selectedDevice]);
 
-  useEffect(() => {
-    if (selectedDevice) {
-      console.log('selected device: ', selectedDevice);
-    }
-  }, [selectedDevice]);
-
-  useEffect(() => {
-    if (servicesDiscovered) {
-      console.log('services discovered');
-    }
-  }, [servicesDiscovered]);
-
   return (
     <SafeAreaView style={styles.AppView}>
-      <View style={styles.TitleView}>
-        <Text style={styles.Title}>Lume</Text>
-      </View>
+      <MainTitle />
       <View style={styles.ScanView}>
         {selectedDevice ? (
           <View style={{flex: 1, width: '100%'}}>
@@ -82,15 +69,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-  },
-  TitleView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  Title: {
-    fontSize: 40,
-    fontWeight: 'bold',
   },
   ScanView: {
     flex: 8,

@@ -9,12 +9,6 @@ export const devicesSlice = createSlice({
   initialState,
   reducers: {
     updateDevices: (state = initialState, action) => {
-      console.log('state: ', state);
-      console.log('action:', action);
-      // return {
-      //   ...state,
-      //   ...action.payload,
-      // };
       return {
         ...state,
         devices: [...state.devices, action.payload],
