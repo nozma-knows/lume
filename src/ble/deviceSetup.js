@@ -6,6 +6,7 @@ import {updateDevices} from './../redux/devicesSlice';
 
 const saveDeviceDetails = (dispatch, device, name, location) => {
   const data = {
+    details: device,
     id: device.id,
     name,
     location,
