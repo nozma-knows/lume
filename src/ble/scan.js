@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 import {View, Text, Pressable, StyleSheet, FlatList} from 'react-native';
 import {BleManager} from 'react-native-ble-plx';
 
@@ -8,18 +9,24 @@ export const manager = new BleManager();
 const expectedServices = ['0000180a-0000-1000-8000-00805f9b34fb'];
 
 // Function to scan for BLE devices
-const scanning = (selectedDevice, discoveredDevices, setDiscoveredDevices) => {
+const scanning = (
+  devices,
+  selectedDevice,
+  discoveredDevices,
+  setDiscoveredDevices,
+) => {
   // Scan for BLE devices
-  manager.startDeviceScan(expectedServices, null, (error, device) => {
+  manager.startDeviceScan(null, null, (error, device) => {
     if (error) {
       console.log('Error: ', error);
       return;
     }
     if (
       !discoveredDevices.some(item => item.id === device.id) &&
-      device.name !== null
+      device.name !== null &&
+      !devices.some(item => item.id === device.id)
     ) {
-      setDiscoveredDevices(devices => [...devices, device]);
+      setDiscoveredDevices(d => [...d, device]);
     }
     if (selectedDevice) {
       manager.stopDeviceScan();
@@ -28,10 +35,12 @@ const scanning = (selectedDevice, discoveredDevices, setDiscoveredDevices) => {
 };
 
 export default function Scan({setScanning, selectedDevice, setSelectedDevice}) {
+  const {devices} = useSelector(state => state.devices);
+
   const [discoveredDevices, setDiscoveredDevices] = useState([]);
 
   // Start scanning
-  scanning(selectedDevice, discoveredDevices, setDiscoveredDevices);
+  scanning(devices, selectedDevice, discoveredDevices, setDiscoveredDevices);
 
   // Render device in flat list
   const renderDevice = ({item}) => (

@@ -23,17 +23,34 @@ import Navbar from '../ui/navbar/navbar';
 //   '#FF0000',
 // ];
 
+const CheckIsConnected = async device => {
+  const connected = await device.isConnected();
+  if (!connected) {
+    device
+      .connect()
+      .then(item => {
+        return item.discoverAllServicesAndCharacteristics();
+      })
+      .catch(error => console.log('Error reconnecting to device: ', error));
+  }
+};
+
 export default function Controller({navigation}) {
   // Grab devices from store
   const {devices} = useSelector(state => state.devices);
   const light = devices[0].details;
-  console.log('light: ', light);
+  CheckIsConnected(light);
+  // console.log('lightConnected: ', lightConnected);
   // Variables for setting LED color
   const [currentColor, setCurrentColor] = useState();
   const [selectedColor, setSelectedColor] = useState();
 
   useEffect(() => {
     if (selectedColor) {
+      console.log(
+        'REACT_APP_LED_SERVICE_UUID: ',
+        process.env.REACT_APP_LED_SERVICE_UUID,
+      );
       const color = selectedColor.replace('#', '0x');
       light
         .writeCharacteristicWithResponseForService(
